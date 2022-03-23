@@ -367,7 +367,7 @@ class Board(tk.Frame):
     
     def set_squares(self): #fills frame with buttons representing squares
 
-        Dice_B = tk.Button(self, text="Roll Dice",state=tk.DISABLED,command=self.roll_dice)
+        Dice_B = tk.Button(self, text="Roll Dice",state=tk.D,command=self.roll_dice)
         Dice_B.grid(row=20,column=0)
         for x in range(8):
             for y in range(8):
@@ -401,12 +401,14 @@ class Board(tk.Frame):
             print("Player 1 turn")
         if(self.turns %2 == 0):
             print("Player 1's Turn Aliens")
-            self.startrund()
+            self.startround()
 
         elif(self.turns%2==0):
             print("Player 2's turn humans")
-            self.startrund()
-        
+            self.startround()
+
+    def startround(self):
+        print("nothing")
         
     def import_pieces(self): #opens and stores images of pieces and prepares the pieces for the game for both sides
         path = os.path.join(os.path.dirname(__file__), "white") #stores white pieces images into dicts
