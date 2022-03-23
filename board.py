@@ -26,13 +26,13 @@ class Board(tk.Frame):
         self.black_pieces = ["pyimage8", "pyimage10", "pyimage11", "pyimage12", "pyimage13", "pyimage14"]
         self.dice_pieces = ["\u2680","\u2681","\u2682","\u2683","\u2684","\u2685"]
        
-      #  self.buttons_pressed = 0
-      #  self.turns = 0
-       # self.sq1 = None #first square clicked
-        # self.sq2 = None 
-        # self.sq1_button = None #button associated with the square clicked
-        # self.sq2_button = None
-        # self.piece_color = None
+        self.buttons_pressed = 0
+        self.turns = 0
+        self.sq1 = None #first square clicked
+        self.sq2 = None 
+        self.sq1_button = None #button associated with the square clicked
+        self.sq2_button = None
+        self.piece_color = None
         # self.wk_moved = False #for castling
         # self.bk_moved = False
         # self.wr1_moved = False
@@ -48,47 +48,48 @@ class Board(tk.Frame):
         self.label.config(text=d1)
 
         if(d1=="\u2860"):
-            print("1") 
+            return 1 
         elif d1=='\u2861':
-            print("2")
+            return 2
         elif d1=='\u2862':
-            print("3")
+            return 3
         elif d1=='\u2863':
-            print("4")
+            return 4
         elif d1=='\u2864':
-            print("5")
+            return 5
         elif d1=='\u2865':
-            print("6")
+            return 6
         
 
-    # def select_piece(self, button): #called when a square button is pressed, consists of majority of the movement code
-    #     if button["image"] in self.white_pieces and self.buttons_pressed == 0: #checks color of first piece
-    #         self.piece_color = "white"
-    #     elif button["image"] in self.black_pieces and self.buttons_pressed == 0:
-    #         self.piece_color = "black"      
-        
-    #     if (self.piece_color == "white" and self.turns % 2 == 0) or (self.piece_color == "black" and self.turns % 2 == 1) or self.buttons_pressed == 1: #prevents people from moving their pieces when it's not their turn
-    #         if self.buttons_pressed == 0: #stores square and button of first square selected
-    #             self.sq1 = list(self.squares.keys())[list(self.squares.values()).index(button)] #retrieves pos of piece
-    #             self.sq1_button = button
-    #             self.buttons_pressed += 1
+    def select_piece(self, button): #called when a square button is pressed, consists of majority of the movement code
+        if button["image"] in self.white_pieces and self.buttons_pressed == 0: #checks color of first piece
+            self.piece_color = "white"
+        elif button["image"] in self.black_pieces and self.buttons_pressed == 0:
+            self.piece_color = "black"      
+
+    # #preventing people from moving their pieces when it's not their turn     
+        if (self.piece_color == "white" and self.turns % 2 == 0) or (self.piece_color == "black" and self.turns % 2 == 1) or self.buttons_pressed == 1: 
+            if self.buttons_pressed == 0: #stores square and button of first square selected
+                self.sq1 = list(self.squares.keys())[list(self.squares.values()).index(button)] #retrieves pos of piece
+                self.sq1_button = button
+                self.buttons_pressed += 1
              
-    #         elif self.buttons_pressed==1: #stores square and button of second square selected
-    #             self.sq2 = list(self.squares.keys())[list(self.squares.values()).index(button)]
-    #             self.sq2_button = button
-    #             if self.sq2 == self.sq1: #prevents self-destruction and allows the user to choose a new piece
-    #                 self.buttons_pressed = 0
-    #                 return
+            elif self.buttons_pressed==1: #stores square and button of second square selected
+                self.sq2 = list(self.squares.keys())[list(self.squares.values()).index(button)]
+                self.sq2_button = button
+                if self.sq2 == self.sq1: #prevents self-destruction and allows the user to choose a new piece
+                    self.buttons_pressed = 0
+                    return
                 
-    #             if self.allowed_piece_move() and self.friendly_fire() == False: #makes sure the move is legal
-    #                 prev_sq1 = self.sq1
-    #                 prev_sq1_button_piece = self.sq1_button["image"]
-    #                 prev_sq2 = self.sq2
-    #                 prev_sq2_button_piece = self.sq2_button["image"]
-    #                 self.squares[self.sq2].config(image=self.sq1_button["image"]) #moves pice in sq1 to sq2
-    #                 self.squares[self.sq2].image = self.sq1_button["image"]
-    #                 self.squares[self.sq1].config(image=self.white_images["blank.png"]) #clears sq1
-    #                 self.squares[self.sq1].image = self.white_images["blank.png"]
+                if self.allowed_piece_move(self.dice) and self.friendly_fire() == False: #makes sure the move is legal
+                    prev_sq1 = self.sq1
+                    prev_sq1_button_piece = self.sq1_button["image"]
+                    prev_sq2 = self.sq2
+                    prev_sq2_button_piece = self.sq2_button["image"]
+                    self.squares[self.sq2].config(image=self.sq1_button["image"]) #moves pice in sq1 to sq2
+                    self.squares[self.sq2].image = self.sq1_button["image"]
+                    self.squares[self.sq1].config(image=self.white_images["blank.png"]) #clears sq1
+                    self.squares[self.sq1].image = self.white_images["blank.png"]
     #                 if  self.in_check() == True and self.castled == False: #for some reason it says king is in check after a castle so I set up a variable here that would prevent this code from running
     #                     self.squares[prev_sq2].config(image=prev_sq2_button_piece) #reverts movement since king is or would be put into check because of move
     #                     self.squares[prev_sq2].image = prev_sq2_button_piece
@@ -211,10 +212,8 @@ class Board(tk.Frame):
     #     return True
                 
         
-    # def allowed_piece_move(self): #checks whether the piece can move to square 2 with respect to their movement capabilities
-    #     wb, wk, wn, wp, wq, wr = "pyimage1", "pyimage3", "pyimage4", "pyimage5", "pyimage6", "pyimage7" #redefining pyimages for readability
-    #     bb, bk, bn, bp, bq, br = "pyimage8", "pyimage10", "pyimage11", "pyimage12", "pyimage13", "pyimage14"
-
+    def allowed_piece_move(self,dice): #checks whether the piece can move to square 2 with respect to their movement capabilities
+        wh,ba="human_image","alien_image"
     #     if self.sq1_button["image"] == "pyimage2" or self.sq1_button["image"] == "pyimage9": #for when this function is called for check
     #         return False
         
@@ -228,11 +227,18 @@ class Board(tk.Frame):
     #         if (abs(int(self.sq1[1]) - int(self.sq2[1])) == 1) and (abs(self.ranks.find(self.sq1[0]) - self.ranks.find(self.sq2[0])) == 2): #allows wide L moves
     #             return True
         
-    #     if self.sq1_button["image"] == wk or self.sq1_button["image"] == bk: #king movement
-    #         if (abs(int(self.sq1[1]) - int(self.sq2[1])) < 2) and (abs(self.ranks.find(self.sq1[0]) - self.ranks.find(self.sq2[0]))) < 2: #allows 1 square moves
-    #             return True
-    #         if self.castle() is True:
-    #             return True
+        if self.sq1_button["image"] == wh or self.sq1_button["image"] == ba: #king movement
+            if dice == 1:
+                if (abs(int(self.sq1[1]) - int(self.sq2[1])) < 2) and (abs(self.ranks.find(self.sq1[0]) - self.ranks.find(self.sq2[0]))) < 2: #allows 1 square moves
+                    return True
+            elif dice ==2:
+                if(abs(int(self.sq1[1]))- int(self.sq2[1])<3) and ((abs(self.ranks.find(self.sq1[0]) - self.ranks.find(self.sq2[0]))) < 3):
+                    return True
+            
+        
+        
+            # if self.castle() is True:
+            #     return True
         
     #     if self.sq1_button["image"] == wp: #white pawn movement
     #         if "2" in self.sq1: #allows for 2 space jump from starting pos
@@ -361,7 +367,7 @@ class Board(tk.Frame):
     
     def set_squares(self): #fills frame with buttons representing squares
 
-        Dice_B = tk.Button(self, text="Roll Dice",command=self.roll_dice)
+        Dice_B = tk.Button(self, text="Roll Dice",state=tk.DISABLED,command=self.roll_dice)
         Dice_B.grid(row=20,column=0)
         for x in range(8):
             for y in range(8):
@@ -386,9 +392,21 @@ class Board(tk.Frame):
                 print(8-x,y)
                 pos = self.ranks[y]+str(x+1)
                 self.squares.setdefault(pos, B) #creates list of square positions
-                self.squares[pos].config(command= lambda key=self.squares[pos]:print()) 
+                # self.squares[pos].config(command= lambda key=self.squares[pos]:print()) 
         # print(self.squares)    
+    
+    #Defines the gameplay of the game
+    def gameplay(self):
+        if(self.turns == 0):
+            print("Player 1 turn")
+        if(self.turns %2 == 0):
+            print("Player 1's Turn Aliens")
+            self.startrund()
 
+        elif(self.turns%2==0):
+            print("Player 2's turn humans")
+            self.startrund()
+        
         
     def import_pieces(self): #opens and stores images of pieces and prepares the pieces for the game for both sides
         path = os.path.join(os.path.dirname(__file__), "white") #stores white pieces images into dicts
@@ -455,4 +473,6 @@ board.import_pieces()
 board.set_pieces()
 
 board.roll_dice()
+board.gameplay()
+        
 board.mainloop()
