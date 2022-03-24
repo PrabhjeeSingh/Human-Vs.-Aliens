@@ -44,7 +44,7 @@ class Board(tk.Frame):
 
     def roll_dice(self):
         d1=random.choice(self.dice_pieces)
-       
+        self.dice=d1       
         self.label.config(text=d1)
 
         if(d1=="\u2860"):
@@ -367,8 +367,8 @@ class Board(tk.Frame):
     
     def set_squares(self): #fills frame with buttons representing squares
 
-        Dice_B = tk.Button(self, text="Roll Dice",state=tk.D,command=self.roll_dice)
-        Dice_B.grid(row=20,column=0)
+        self.Dice_B = tk.Button(self, text="Roll Dice",state=tk.DISABLED,command=self.roll_dice)
+        self.Dice_B.grid(row=20,column=0)
         for x in range(8):
             for y in range(8):
                 if x%2==0 and y%2==0: #alternates between dark/light tiles
@@ -398,17 +398,18 @@ class Board(tk.Frame):
     #Defines the gameplay of the game
     def gameplay(self):
         if(self.turns == 0):
-            print("Player 1 turn")
+            print("Game Start")
         if(self.turns %2 == 0):
             print("Player 1's Turn Aliens")
-            self.startround()
+            self.startround(1)
 
         elif(self.turns%2==0):
             print("Player 2's turn humans")
-            self.startround()
+            self.startround(2)
 
-    def startround(self):
-        print("nothing")
+    def startround(self,p):
+        self.Dice_B.config(state=tk.NORMAL)
+        print("nothing"+ self.dice)
         
     def import_pieces(self): #opens and stores images of pieces and prepares the pieces for the game for both sides
         path = os.path.join(os.path.dirname(__file__), "white") #stores white pieces images into dicts
