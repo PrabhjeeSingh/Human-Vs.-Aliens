@@ -375,7 +375,7 @@ class Board(tk.Frame):
 
 
     def import_pieces(self): #opens and stores images of pieces and prepares the pieces for the game for both sides
-        path = os.path.join(os.path.dirname(__file__), "white") #stores white pieces images into dicts
+        path = os.path.join(os.path.dirname(__file__), "Alien") #stores white pieces images into dicts
         w_dirs = os.listdir(path)
         for file in w_dirs:
             img = Image.open(path+"\\"+file)
@@ -383,7 +383,7 @@ class Board(tk.Frame):
             img = ImageTk.PhotoImage(image=img)
             self.white_images.setdefault(file, img)
 
-        path = os.path.join(os.path.dirname(__file__), "black") #stores black pieces images into dicts
+        path = os.path.join(os.path.dirname(__file__), "Human") #stores black pieces images into dicts
         b_dirs = os.listdir(path)
         for file in b_dirs:
             img = Image.open(path+"\\"+file)
